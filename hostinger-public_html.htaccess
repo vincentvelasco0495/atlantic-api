@@ -1,0 +1,24 @@
+# Copy this file to the Laravel project root on Hostinger (public_html/.htaccess).
+#
+# Hostinger document root is public_html, but Laravel's front controller lives in
+# public_html/public/index.php. This rewrite sends API/OPTIONS requests to Laravel
+# instead of returning a Hostinger 404 before PHP runs.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Preserve Authorization header for Bearer token API requests
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Already targeting /public — do not rewrite again
+    RewriteRule ^public/ - [L]
+
+    # Serve existing static assets from /public (css, js, favicon, etc.)
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Route all other requests (including OPTIONS preflight to /api/*) to Laravel
+    RewriteRule ^ public/index.php [L]
+</IfModule>
