@@ -2,31 +2,24 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Handles browser preflight OPTIONS requests for the Netlify frontend.
-    | Managed by Laravel's built-in Illuminate\Http\Middleware\HandleCors.
-    |
-    */
-
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => array_values(array_filter(array_map(
-        'trim',
-        explode(',', (string) env(
-            'CORS_ALLOWED_ORIGINS',
-            'https://atlanticseamandormitory.netlify.app'
-        ))
-    ))),
+    'allowed_origins' => [
+        'https://atlanticseamandormitory.netlify.app',
+        'http://localhost:5173',
+    ],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => [
+        'Content-Type',
+        'Authorization',
+        'Accept',
+        'X-Requested-With',
+        'X-XSRF-TOKEN',
+    ],
 
     'exposed_headers' => [],
 

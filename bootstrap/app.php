@@ -12,8 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Required when Laravel runs behind Hostinger's reverse proxy / CDN (hcdn).
-        // Ensures correct scheme/host so HandleCors can match the request Origin.
+        // Hostinger sits behind hcdn. Trust forwarded proto/host so CORS
+        // origin matching is not skipped after an HTTPS proxy hop.
         $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
